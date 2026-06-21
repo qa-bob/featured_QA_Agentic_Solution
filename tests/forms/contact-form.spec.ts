@@ -10,10 +10,16 @@
 import { test, expect } from '@fixtures/site.fixture';
 
 test.describe('Contact Form @forms', () => {
-  // Skip the entire suite when skipForms is configured for this site
-  test.beforeEach(async ({ siteConfig }) => {
+  // Skip the entire suite when skipForms is configured or a bot-detection wall is in place
+  test.beforeEach(async ({ siteConfig, page }) => {
     if (siteConfig.skipForms) {
       test.skip(true, `Forms testing skipped for "${siteConfig.name}" (skipForms: true)`);
+    }
+    // Navigate first, then check for bot wall
+    await page.goto(siteConfig.url, { waitUntil: 'domcontentloaded' }).catch(() => null);
+    const title = await page.title().catch(() => '');
+    if (title.includes('Security Checkpoint') || title.includes('Vercel')) {
+      test.skip(true, 'Vercel Security Checkpoint is blocking page access — forms cannot be tested headlessly');
     }
   });
 

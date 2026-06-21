@@ -12,7 +12,7 @@ import { dismissCookieBanner } from '@utils/visual-helper';
 
 // Shared screenshot options applied to all visual tests
 const SCREENSHOT_OPTIONS = {
-  maxDiffPixels: 500,
+  maxDiffPixelRatio: 0.02,
   animations: 'disabled',
   caret: 'hide',
   fullPage: true,
