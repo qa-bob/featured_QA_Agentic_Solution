@@ -62,6 +62,7 @@ npm test                    # Run all tests
 npm run test:smoke          # @smoke tests only
 npm run test:navigation     # @navigation tests only
 npm run test:forms          # @forms tests only
+npm run test:functional     # @functional tests only
 npm run test:visual         # @visual tests only
 npm run test:responsive     # @responsive tests only
 npm run baseline            # Update visual snapshots

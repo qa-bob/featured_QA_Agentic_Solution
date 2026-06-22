@@ -8,6 +8,7 @@
     "test:navigation": "playwright test --grep @navigation",
     "test:forms": "playwright test --grep @forms",
     "test:visual": "playwright test --grep @visual",
+    "test:functional": "playwright test --grep @functional",
     "test:responsive": "playwright test --grep @responsive",
     "test:headed": "playwright test --headed",
     "report": "playwright show-report",

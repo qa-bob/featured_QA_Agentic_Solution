@@ -1,7 +1,33 @@
+# ── Dependencies ──────────────────────────────────────────────────────────────
 node_modules/
-dist/
-playwright-report/
+
+# ── Playwright output ─────────────────────────────────────────────────────────
 test-results/
+playwright-report/
 __snapshots__/
+
+# ── TypeScript build output ───────────────────────────────────────────────────
+dist/
+*.tsbuildinfo
+
+# ── Environment variables ─────────────────────────────────────────────────────
 .env
+.env.local
+.env.*.local
+# .env.example is intentionally tracked
+
+# ── Claude Code personal files ────────────────────────────────────────────────
 CLAUDE.local.md
+.claude/memory/
+
+# ── OS ────────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Editor ───────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*.orig
