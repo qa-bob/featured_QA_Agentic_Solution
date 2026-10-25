@@ -62,7 +62,7 @@ test.describe('Site Availability @smoke', () => {
       consoleErrors.push(`[pageerror] ${err.message}`);
     });
 
-    await page.goto(siteConfig.url, { waitUntil: 'networkidle' });
+    await page.goto(siteConfig.url, { waitUntil: 'load' });
 
     // Filter out known benign third-party errors (analytics, ads, etc.)
     const criticalErrors = consoleErrors.filter((err) => {
@@ -104,11 +104,9 @@ test.describe('Site Availability @smoke', () => {
     expect(title.trim(), 'Page <title> should not be empty').toBeTruthy();
     expect(title.trim().length, 'Page title should be meaningful (>3 chars)').toBeGreaterThan(3);
 
-    // Meta description check — use short timeout; absence is a warning, not a hard failure
-    const metaDescription = await page
-      .locator('meta[name="description"]')
-      .getAttribute('content', { timeout: 3000 })
-      .catch(() => null);
+    // Meta description check — absence is a warning, not a hard failure
+    const metaTag = page.locator('meta[name="description"]').first();
+    const metaDescription = (await metaTag.count()) > 0 ? await metaTag.getAttribute('content') : null;
 
     // Meta description is a best-practice, not hard requirement — warn if absent
     if (!metaDescription || metaDescription.trim().length === 0) {

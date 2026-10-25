@@ -4,7 +4,6 @@ node_modules/
 # ── Playwright output ─────────────────────────────────────────────────────────
 test-results/
 playwright-report/
-__snapshots__/
 
 # ── TypeScript build output ───────────────────────────────────────────────────
 dist/

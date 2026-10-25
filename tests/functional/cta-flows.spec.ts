@@ -27,13 +27,7 @@ test.describe('CTA Flows @functional', () => {
       hasText: /request demo|book demo|get demo|free trial|try free|start free|get started|sign up free/i,
     }).first();
 
-    if (await demoCta.count() === 0) {
-      console.warn(
-        '[functional] No demo/trial CTA found matching common patterns. ' +
-        'Check site.config.json expectedNavItems to see if the CTA uses different wording.'
-      );
-      return;
-    }
+    test.skip(await demoCta.count() === 0, 'No demo/trial CTA found matching common patterns');
 
     await expect(demoCta, 'Demo/trial CTA should be visible').toBeVisible();
   });
@@ -45,10 +39,7 @@ test.describe('CTA Flows @functional', () => {
       hasText: /get started|request demo|free trial|try free|learn more|see how|see it in action/i,
     }).first();
 
-    if (await primaryCta.count() === 0) {
-      console.warn('[functional] No primary CTA found to click-through test.');
-      return;
-    }
+    test.skip(await primaryCta.count() === 0, 'No primary CTA found');
 
     const href = await primaryCta.getAttribute('href');
 
@@ -94,13 +85,7 @@ test.describe('CTA Flows @functional', () => {
     const hasCssStyled = await headerCta.count() > 0;
     const hasTextBased = await headerCtaByText.count() > 0;
 
-    if (!hasCssStyled && !hasTextBased) {
-      console.warn(
-        '[functional] No header CTA found. ' +
-        'B2B SaaS best practice is to have a visible CTA in the header on every page.'
-      );
-      return;
-    }
+    test.skip(!hasCssStyled && !hasTextBased, 'No header CTA found');
 
     const activeCta = hasCssStyled ? headerCta : headerCtaByText;
     await expect(activeCta, 'Header CTA should be visible').toBeVisible();
@@ -115,13 +100,7 @@ test.describe('CTA Flows @functional', () => {
       hasText: /contact|support|help|get in touch|reach out|talk to us/i,
     }).first();
 
-    if (await contactLink.count() === 0) {
-      console.warn(
-        '[functional] No contact/support link found on the homepage. ' +
-        'Users should be able to easily find how to reach the company.'
-      );
-      return;
-    }
+    test.skip(await contactLink.count() === 0, 'No contact/support link found on the homepage');
 
     await expect(contactLink, 'Contact link should be visible').toBeVisible();
   });
@@ -135,7 +114,7 @@ test.describe('CTA Flows @functional', () => {
     }).catch(() => null);
 
     if (!response) {
-      console.warn('[functional] Could not navigate to /contact — page may not exist at this path.');
+      test.skip(true, 'Could not navigate to /contact');
       return;
     }
 
@@ -149,10 +128,7 @@ test.describe('CTA Flows @functional', () => {
       ).catch(() => null);
 
       if (!altResponse || altResponse.status() === 404) {
-        console.warn(
-          '[functional] Contact page not found at /contact or /contact-us. ' +
-          'Contact functionality may be embedded on the homepage.'
-        );
+        test.skip(true, 'Contact page not found at /contact or /contact-us');
         return;
       }
 

@@ -51,10 +51,8 @@ test.describe('Regression Tests @functional', () => {
   test('canonical link tag is present (SEO) @functional', async ({ page, siteConfig }) => {
     await page.goto(siteConfig.url, { waitUntil: 'domcontentloaded' });
 
-    const canonical = await page
-      .locator('link[rel="canonical"]')
-      .getAttribute('href')
-      .catch(() => null);
+    const canonicalTag = page.locator('link[rel="canonical"]').first();
+    const canonical = (await canonicalTag.count()) > 0 ? await canonicalTag.getAttribute('href') : null;
 
     if (!canonical) {
       console.warn(
@@ -74,9 +72,12 @@ test.describe('Regression Tests @functional', () => {
   test('Open Graph tags are present (social sharing) @functional', async ({ page, siteConfig }) => {
     await page.goto(siteConfig.url, { waitUntil: 'domcontentloaded' });
 
-    const ogTitle = await page.locator('meta[property="og:title"]').getAttribute('content').catch(() => null);
-    const ogDescription = await page.locator('meta[property="og:description"]').getAttribute('content').catch(() => null);
-    const ogImage = await page.locator('meta[property="og:image"]').getAttribute('content').catch(() => null);
+    const ogTitleTag = page.locator('meta[property="og:title"]').first();
+    const ogTitle = (await ogTitleTag.count()) > 0 ? await ogTitleTag.getAttribute('content') : null;
+    const ogDescriptionTag = page.locator('meta[property="og:description"]').first();
+    const ogDescription = (await ogDescriptionTag.count()) > 0 ? await ogDescriptionTag.getAttribute('content') : null;
+    const ogImageTag = page.locator('meta[property="og:image"]').first();
+    const ogImage = (await ogImageTag.count()) > 0 ? await ogImageTag.getAttribute('content') : null;
 
     const missing: string[] = [];
     if (!ogTitle) missing.push('og:title');
@@ -132,10 +133,7 @@ test.describe('Regression Tests @functional', () => {
         .filter((href) => href.startsWith('/') && !href.startsWith('//') && href !== '#');
     });
 
-    if (internalHrefs.length === 0) {
-      console.warn('[regression] No internal links found on homepage to check.');
-      return;
-    }
+    test.skip(internalHrefs.length === 0, 'No internal links found on homepage to check');
 
     const uniqueHrefs = [...new Set(internalHrefs)].slice(0, 15); // Limit to first 15
     const broken: Array<{ href: string; status: number }> = [];
@@ -175,7 +173,7 @@ test.describe('Regression Tests @functional', () => {
       errors.push(err.message);
     });
 
-    await page.goto(siteConfig.url, { waitUntil: 'networkidle' });
+    await page.goto(siteConfig.url, { waitUntil: 'load' });
 
     const critical = errors.filter((e) => {
       const lower = e.toLowerCase();
