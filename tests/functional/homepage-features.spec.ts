@@ -68,7 +68,7 @@ test.describe('Homepage Features @functional', () => {
 
     if (!href) {
       // CTA is a button (likely triggers a modal/scroll) — check it's interactive
-      const tagName = await firstCta.evaluate<string>((el) => el.tagName.toLowerCase());
+      const tagName = await firstCta.evaluate((el) => el.tagName.toLowerCase());
       expect(
         ['button', 'a'].includes(tagName),
         'CTA should be a button or anchor element'
@@ -103,13 +103,7 @@ test.describe('Homepage Features @functional', () => {
       'section:has(h2), section:has(h3)'
     ).first();
 
-    if (await featuresSection.count() === 0) {
-      console.warn(
-        '[functional] No distinct features section found. ' +
-        'Consider adding a clearly labeled section with id="features" or class="features".'
-      );
-      return;
-    }
+    test.skip(await featuresSection.count() === 0, 'No distinct features section found');
 
     await expect(featuresSection).toBeVisible();
   });
@@ -180,7 +174,7 @@ test.describe('Homepage Features @functional', () => {
   });
 
   test('all images on homepage load successfully @functional', async ({ page, siteConfig }) => {
-    await page.goto(siteConfig.url, { waitUntil: 'networkidle' });
+    await page.goto(siteConfig.url, { waitUntil: 'load' });
 
     const brokenImages = await page.evaluate<string[]>(() => {
       const imgs = Array.from(document.querySelectorAll('img'));
